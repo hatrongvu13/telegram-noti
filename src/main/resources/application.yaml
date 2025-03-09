@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: telegram-notification
+
+server:
+  servlet:
+    context-path: /telegram-notification
+  port: ${SERVER_PORT:8080}
+
+telegram:
+  bot:
+    token: ${BOT_TOKEN:your_bot_token}
+    chatId : ${CHAT_ID:-4515196251}

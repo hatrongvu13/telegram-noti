@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/telegram-noti:${{ github.sha }}
+          docker build -t ghcr.io/${{ github.repository }}/telegram-noti:${{ github.sha }} .
 
       - name: Push Docker image to GitHub Container Registry
         run: |

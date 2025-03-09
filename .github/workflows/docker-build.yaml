@@ -65,8 +65,8 @@ jobs:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          username: ${{ github.actor }}  # Tên người dùng GitHub
-          password: ${{ secrets.GITHUB_TOKEN }}  # Token xác thực GitHub
+          username: ${{ secrets.DOCKER_USER }}  # Tên người dùng GitHub
+          password: ${{ secrets.DOCKER_TOKEN }}  # Token xác thực GitHub
 
       - name: Build Docker image
         run: |

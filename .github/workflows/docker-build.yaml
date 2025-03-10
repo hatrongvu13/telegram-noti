@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -20,11 +23,11 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}  # Sử dụng GitHub token mặc định
+          password: ${{ secrets.GITHUB_TOKEN }}  # Sử dụng GITHUB_TOKEN mặc định
       - name: Set up java JDK
         uses: actions/setup-java@v2
         with:
@@ -41,54 +44,3 @@ jobs:
       - name: Push Docker image to GitHub Container Registry
         run: |
           docker push ghcr.io/${{ github.repository }}/telegram-noti:${{ github.sha }}
-
-#name: Build and Push Docker Image
-#
-#on:
-#  push:
-#    branches:
-#      - main
-#    tags:
-#      - 'v*'
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#        with:
-#          ref: ${{ github.ref }}
-#
-#      - name: Set up Java JDK
-#        uses: actions/setup-java@v2
-#        with:
-#          java-version: '17'  # Hoặc bất kỳ phiên bản Java bạn cần, ví dụ 8, 17, v.v.
-#          distribution: 'temurin'
-#
-#      - name: Build with Maven
-#        run: mvn clean install -DskipTests=true  # Chạy lệnh Maven để build mà không chạy tests (bạn có thể bỏ qua "-DskipTests" nếu muốn chạy test)
-#
-#      - name: Log in to GitHub Container Registry
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKER_USER }}  # Tên người dùng GitHub
-#          password: ${{ secrets.DOCKER_TOKEN }}  # Token xác thực GitHub
-#
-#      - name: Build Docker image
-#        run: |
-#          IMAGE_TAG=${{ github.ref_name }}  # Từ tag hoặc branch name
-#          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-#            IMAGE_TAG=${GITHUB_REF#refs/tags/}  # Lấy tên tag
-#          fi
-#          echo "Building Docker image with tag: $IMAGE_TAG"
-#
-#          docker buildx build \
-#            --tag ${{ secrets.DOCKER_USER }}/telegram-notification:$IMAGE_TAG \
-#            --push .
-#
-#      - name: Push Docker image
-#        run: |
-#          IMAGE_TAG=${{ github.sha }}  # Sử dụng SHA commit nếu không có tag
-#          docker push dcoker.io/${{ secrets.DOCKER_USER }}/telegram-notification:$IMAGE_TAG

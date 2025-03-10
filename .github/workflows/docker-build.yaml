@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+          docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
 
       - name: Push Docker image to GitHub Container Registry
         run: |
